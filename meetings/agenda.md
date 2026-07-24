@@ -21,3 +21,22 @@ Discussion points
 - We currently have no support for mago in the CI matrix, we could probably run mago out of the `additional_checks` key for the Laminas CI action instead of adding the runs directly to GHA config.
 - A new major release of Psalm is possibly coming soon. The work required to get Psalm upgrading is not likely to be dissimilar to switching to mago I'd estimate.
 - It's possible that Mago v2 could be a painful upgrade, at least from CI configuration as I believe the lint and analyse tools may be getting merged and there is also talk of introducing levels (as per PHPStan / Psalm)
+
+### Allow compatible Rector versions for `laminas-servicemanager-migration`
+
+As I’m now less involved in Rector’s day-to-day development and verification, I may not always be available to review and validate every Rector dependency update for this package.
+
+Because of that, I’m wondering whether we could replace the pinned version in:
+
+* https://github.com/laminas/laminas-servicemanager-migration
+
+with a compatible version constraint:
+
+```diff
+-"rector/rector": "2.5.7"
++"rector/rector": "^2.5.7"
+```
+
+This would allow compatible Rector updates without requiring a separate pull request for every release. We could then remove the related Renovate `rangeStrategy` configuration from `renovate.json`.
+
+When a future Rector release introduce an incompatible API change, we can address it when needed.
